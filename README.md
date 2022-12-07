@@ -20,7 +20,7 @@ This is a simple example showing how to send a GET HTTP request to the postman-e
 ## Video Tutorial
 There is a free coding byte video tutorial on this code which can be found [here](https://codingbytes.teachable.com/p/codingbytes_twincat3)
 
-[![image](./docs/Images/CodingBytes.png)](https://codingbytes.teachable.com/p/codingbytes_twincat3)
+[![image](./docs/images/CodingBytes.png)](https://codingbytes.teachable.com/p/codingbytes_twincat3)
 
 ## Getting Started
 Activate the configuration, run the project then trigger the code by setting "trigger" to TRUE.
