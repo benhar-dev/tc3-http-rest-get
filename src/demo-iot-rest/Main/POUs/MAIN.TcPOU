@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="MAIN" Id="{bb060100-7ae6-4719-b1ce-cc5bd1204cf6}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	
+	httpClient : FB_IotHttpClient :=(sHostName:='postman-echo.com',bKeepAlive:=TRUE, tConnectionTimeout:=T#10S);
+	request : FB_IotHttpRequest;
+	trigger : BOOL;
+	state : (IDLE, SEND_REQUEST,WAIT_FOR_RESPONSE,READ_RESPONSE,ERROR);
+	debugRequestContent : STRING(511);
+	jsonParser : FB_JsonDomParser;
+	jsonDocument : SJsonValue;
+	jsonArgsMember : SJsonValue;
+	jsonFoo2Member : SJsonValue;
+	results : STRING;
+	 
+
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF NOT httpClient.bConfigured THEN
+    httpClient.nHostPort:= 80;
+END_IF
+
+IF httpClient.bConfigured THEN
+	
+	CASE state OF
+		
+	IDLE: 
+		
+		IF trigger THEN
+			state := SEND_REQUEST;
+			trigger := FALSE;
+		END_IF
+	
+	SEND_REQUEST : 
+	
+		IF request.SendRequest(sUri:= '/get?foo1=bar1&foo2=bar2',fbClient:= httpClient,eRequestType:= ETcIotHttpRequestType.HTTP_GET, 0, 0, 0) THEN
+			state := WAIT_FOR_RESPONSE;
+		END_IF
+		
+	WAIT_FOR_RESPONSE : 
+	
+		IF NOT request.bBusy THEN
+			state := READ_RESPONSE;
+		END_IF
+		
+		IF request.bError THEN
+			state := ERROR;
+		END_IF
+
+	READ_RESPONSE : 
+	
+		request.GetContent(pContent:= ADR(debugRequestContent),nContentSize:= SIZEOF(debugRequestContent),bSetNullTermination:= TRUE);
+		
+		IF request.nStatusCode >= 200 AND request.nStatusCode < 300 THEN
+			
+			jsonDocument := request.GetJsonDomContent(jsonParser);
+			
+			IF jsonDocument <> 0 THEN
+				
+				IF jsonParser.HasMember(jsonDocument, 'args') THEN
+					
+					jsonArgsMember := jsonParser.FindMember(jsonDocument, 'args');
+					
+					IF jsonParser.HasMember(jsonArgsMember, 'foo2') THEN
+						
+						jsonFoo2Member:= jsonParser.FindMember(jsonArgsMember, 'foo2');
+						
+						IF jsonParser.IsString(jsonFoo2Member) THEN
+							results := jsonParser.GetString(jsonFoo2Member);
+						END_IF					
+						
+					END_IF
+				
+				END_IF
+			
+			END_IF
+			
+		END_IF
+		
+		state := IDLE;
+	
+	ERROR :
+	
+		//
+		
+	END_CASE
+
+END_IF
+
+httpClient.Execute();]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
