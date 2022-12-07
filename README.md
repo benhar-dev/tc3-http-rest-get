@@ -1,4 +1,4 @@
-# Simple example of ...
+# Simple example of making a GET Request on the Postman Echo Public API
 
 ## Disclaimer
 This is a personal guide not a peer reviewed journal or a sponsored publication. We make
@@ -15,24 +15,18 @@ always subject to change, revision, and rethinking at any time. Please do not ho
 in perpetuity.
 
 ## Overview 
-This is a simple example showing ...    
+This is a simple example showing how to send a GET HTTP request to the postman-echo public api.    
+
+## Video Tutorial
+There is a free coding byte video tutorial on this code which can be found [here](https://codingbytes.teachable.com/p/codingbytes_twincat3)
+
+[![image](./docs/Images/CodingBytes.png)](https://codingbytes.teachable.com/p/codingbytes_twincat3)
 
 ## Getting Started
-Getting started notes go here ... (do this, press that, enable this)
-
-## Screenshot
-![image](./docs/images/Screenshot.png)
-
-## Code Snippets
-The following section of code is ...
-
-```javascript
-console.log('hello world');
-```
+Activate the configuration, run the project then trigger the code by setting "trigger" to TRUE.
 
 ## Versions
-* TcXaeShell 3.1.4024.32
-* TE2000 1.12.750.1
+* TcXaeShell 3.1.4024.35
 
 ## Need more help?
 Please visit http://beckhoff.com/ for further guides
